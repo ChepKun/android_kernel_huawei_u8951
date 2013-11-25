@@ -35,24 +35,27 @@
 #include <linux/mm.h>
 #include <linux/oom.h>
 #include <linux/sched.h>
+#include <linux/swap.h>
 #include <linux/rcupdate.h>
 #include <linux/notifier.h>
 
 static uint32_t lowmem_debug_level = 2;
+
 static int lowmem_adj[6] = {
 	0,
 	1,
 	6,
 	12,
 };
-static int lowmem_adj_size = 4;
+static int lowmem_adj_size = 6;
+
 static int lowmem_minfree[6] = {
 	3 * 512,	/* 6MB */
 	2 * 1024,	/* 8MB */
 	4 * 1024,	/* 16MB */
 	16 * 1024,	/* 64MB */
 };
-static int lowmem_minfree_size = 4;
+static int lowmem_minfree_size = 6;
 
 static unsigned long lowmem_deathpending_timeout;
 
@@ -73,7 +76,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	int selected_tasksize = 0;
 	int selected_oom_score_adj;
 	int array_size = ARRAY_SIZE(lowmem_adj);
-	int other_free = global_page_state(NR_FREE_PAGES);
+	int other_free = global_page_state(NR_FREE_PAGES) - totalreserve_pages;
 	int other_file = global_page_state(NR_FILE_PAGES) -
 						global_page_state(NR_SHMEM);
 

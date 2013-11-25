@@ -1036,7 +1036,13 @@ config MACH_MSM8X25_C8833D
 	bool "MSM8X25_C8833D SURF"
 	help
 	  Support for the HUAWEI 8x25 C8833D board.
-    
+config MACH_MSM8X25_Y300_J1
+	depends on ARCH_MSM8625
+	depends on !MSM_STACKED_MEMORY
+	default n
+	bool "MSM8X25_Y300_J1 SURF"
+	help
+	  Support for the HUAWEI 8x25 Y300_J1 board.
 config MACH_MSM8X25_C8813
 	depends on ARCH_MSM8625
 	depends on !MSM_STACKED_MEMORY
@@ -1743,20 +1749,12 @@ config MSM_CPU_FREQ_SET_MIN_MAX
 config MSM_CPU_FREQ_MAX
 	int "Max CPU Frequency"
 	depends on MSM_CPU_FREQ_SET_MIN_MAX
-	default 1209600
+	default 384000
 
 config MSM_CPU_FREQ_MIN
 	int "Min CPU Frequency"
 	depends on MSM_CPU_FREQ_SET_MIN_MAX
-	default 122880
-
-config MSM8X25_OVERCLOCK
- 	bool "Enable overclock for MSM8X25"
-  	depends on MSM_CPU_FREQ_SET_MIN_MAX
-  	default n
-  	help
-    	Enable overclock for MSM8X25. Make sure to set
-    	CONFIG_MSM_CPU_FREQ_MAX to 1209600.
+	default 245760
 
 endif # CPU_FREQ_MSM
 

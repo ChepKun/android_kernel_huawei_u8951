@@ -32,7 +32,7 @@
  */
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)
-#define DEF_FREQUENCY_UP_THRESHOLD		(75)
+#define DEF_FREQUENCY_UP_THRESHOLD		(70)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
@@ -43,7 +43,7 @@
 #define MIN_FREQUENCY_DOWN_DIFFERENTIAL		(1)
 /* define the sample rate to 30ms for non-idle state */
 #ifdef CONFIG_HUAWEI_KERNEL
-#define MICRO_FREQUENCY_PREFERED_SAMPLE_RATE (30000)
+#define MICRO_FREQUENCY_PREFERED_SAMPLE_RATE (25000)
 #endif
 /*
  * The polling frequency of this governor depends on the capability of
@@ -599,12 +599,12 @@ static struct attribute_group dbs_attr_group = {
 
 #ifdef CONFIG_HUAWEI_KERNEL
 /* set sample rate according to the input parameter screen_on:
-   1: set sample rate to non-idle state value, namely 30ms
+   1: set sample rate to non-idle state value, namely 25ms
    0: set sample rate to idle state value, namely 50ms
 */
 void set_sampling_rate(int screen_on)
 {
-    char *buff_on = "30000";
+    char *buff_on = "25000";
     char *buff_off= "50000";
 
     if(1 == screen_on)
@@ -619,13 +619,13 @@ void set_sampling_rate(int screen_on)
 EXPORT_SYMBOL(set_sampling_rate);
 
 /* set threshold according to the input parameter screen_on:
-   1: set up_threshold to non-idle state value, namely 80%
+   1: set up_threshold to non-idle state value, namely 70%
    0: set up_threshold to idle state value, namely 95%
 */
 void set_up_threshold(int screen_on)
 {
-    char *buff_on = "80";
-    char *buff_off= "95";
+    char *buff_on = "70";
+    char *buff_off= "90";
 
     if(1 == screen_on)
     {

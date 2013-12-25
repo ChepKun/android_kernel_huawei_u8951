@@ -32,20 +32,20 @@
  */
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)
-#define DEF_FREQUENCY_UP_THRESHOLD		(70)
+#define DEF_FREQUENCY_UP_THRESHOLD		(80)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
-#define MICRO_FREQUENCY_UP_THRESHOLD		(90)
+#define MICRO_FREQUENCY_UP_THRESHOLD		(95)
 #define MICRO_FREQUENCY_MIN_SAMPLE_RATE		(10000)
 #define MIN_FREQUENCY_UP_THRESHOLD		(11)
 #define MAX_FREQUENCY_UP_THRESHOLD		(100)
 #define MIN_FREQUENCY_DOWN_DIFFERENTIAL		(1)
-#define DEFAULT_FREQ_BOOST_TIME      		(2500000)
+#define DEFAULT_FREQ_BOOST_TIME      		(2000000) // 2 s
 
 /* define the sample rate to 30ms for non-idle state */
 #ifdef CONFIG_HUAWEI_KERNEL
-#define MICRO_FREQUENCY_PREFERED_SAMPLE_RATE (30000)
+#define MICRO_FREQUENCY_PREFERED_SAMPLE_RATE (25000)
 #endif
 /*
  * The polling frequency of this governor depends on the capability of
@@ -123,7 +123,6 @@ static DEFINE_MUTEX(dbs_mutex);
 
 static struct workqueue_struct *input_wq;
 
-/* merge qcom commit c8fc30160f2fcfb2578e13e05202fb387c993a14 */
 struct dbs_work_struct {
 	struct work_struct work;
 	unsigned int cpu;
@@ -670,7 +669,7 @@ static struct attribute_group dbs_attr_group = {
 */
 void set_sampling_rate(int screen_on)
 {
-    char *buff_on = "30000";
+    char *buff_on = "25000";
     char *buff_off= "50000";
 
     if(1 == screen_on)
@@ -961,7 +960,6 @@ static int should_io_be_busy(void)
 	return 0;
 }
 
-/* merge qcom commit c8fc30160f2fcfb2578e13e05202fb387c993a14 */
 static void dbs_refresh_callback(struct work_struct *work)
 {
 	struct cpufreq_policy *policy;
@@ -1012,7 +1010,6 @@ static void dbs_input_event(struct input_handle *handle, unsigned int type,
 		return;
 	}
 
-	/* merge qcom commit c8fc30160f2fcfb2578e13e05202fb387c993a14 */
 	for_each_online_cpu(i)
 		queue_work_on(i, input_wq, &per_cpu(dbs_refresh_work, i).work);
 }
@@ -1155,10 +1152,6 @@ static int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 			rc = input_register_handler(&dbs_input_handler);
 		mutex_unlock(&dbs_mutex);
 
-		/* merge qcom patch Ie9014407.
-		 * delete 1 line and move it to cpufreq_gov_dbs_init.
-		 */
-
 		if (!ondemand_powersave_bias_setspeed(
 					this_dbs_info->cur_policy,
 					NULL,
@@ -1237,10 +1230,6 @@ static int __init cpufreq_gov_dbs_init(void)
 		return -EFAULT;
 	}
 	for_each_possible_cpu(i) {
-		/* merge qcom commit c8fc30160f2fcfb2578e13e05202fb387c993a14 */
-		/* merge qcom patch Ie9014407.
-		* add mutex_init here to make sure it is called before mutex_lock.
-		*/
 		struct cpu_dbs_info_s *this_dbs_info =
 			&per_cpu(od_cpu_dbs_info, i);
 		struct dbs_work_struct *dbs_work =

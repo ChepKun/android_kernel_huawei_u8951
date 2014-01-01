@@ -83,7 +83,8 @@ static ssize_t  buf_vkey_size=0;
 #endif
 
 #define PMEM_KERNEL_EBI1_SIZE	0x3A000
-#define MSM_PMEM_AUDIO_SIZE	0x1F4000
+#define MSM_PMEM_AUDIO_SIZE  	0xF0000
+#define BOOTLOADER_BASE_ADDR  	0x10000
 
 #if defined(CONFIG_GPIO_SX150X)
 enum {
@@ -286,7 +287,7 @@ static unsigned int get_pmem_adsp_size(void)
 #endif
 
 #ifdef CONFIG_ION_MSM
-#define MSM_ION_HEAP_NUM        4
+#define MSM_ION_HEAP_NUM        5
 static struct platform_device ion_dev;
 static int msm_ion_camera_size;
 static int msm_ion_audio_size;
@@ -893,7 +894,7 @@ static void fix_sizes(void)
 		pmem_adsp_size = CAMERA_ZSL_SIZE;*/
 #ifdef CONFIG_ION_MSM
 	msm_ion_camera_size = pmem_adsp_size;
-	msm_ion_audio_size = (MSM_PMEM_AUDIO_SIZE + PMEM_KERNEL_EBI1_SIZE);
+	msm_ion_audio_size = MSM_PMEM_AUDIO_SIZE;
 	msm_ion_sf_size = pmem_mdp_size;
 #endif
 }
@@ -928,7 +929,7 @@ static struct ion_platform_data ion_pdata = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-		/* PMEM_AUDIO */
+		/* AUDIO HEAP 1 */
 		{
 			.id	= ION_AUDIO_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -944,6 +945,15 @@ static struct ion_platform_data ion_pdata = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
+    		/* AUDIO HEAP 2*/
+    		{
+      			.id  = ION_AUDIO_HEAP_BL_ID,
+      			.type  = ION_HEAP_TYPE_CARVEOUT,
+      			.name  = ION_AUDIO_BL_HEAP_NAME,
+      			.memory_type = ION_EBI_TYPE,
+      			.extra_data = (void *)&co_ion_pdata,
+      			.base = BOOTLOADER_BASE_ADDR,
+    		},
 #endif
 	}
 };
@@ -1011,8 +1021,9 @@ static void __init size_ion_devices(void)
 {
 #ifdef CONFIG_MSM_MULTIMEDIA_USE_ION
 	ion_pdata.heaps[1].size = msm_ion_camera_size;
-	ion_pdata.heaps[2].size = msm_ion_audio_size;
+	ion_pdata.heaps[2].size = PMEM_KERNEL_EBI1_SIZE;
 	ion_pdata.heaps[3].size = msm_ion_sf_size;
+	ion_pdata.heaps[4].size = msm_ion_audio_size;
 #endif
 }
 
@@ -1020,7 +1031,7 @@ static void __init reserve_ion_memory(void)
 {
 #if defined(CONFIG_ION_MSM) && defined(CONFIG_MSM_MULTIMEDIA_USE_ION)
 	msm7x27a_reserve_table[MEMTYPE_EBI1].size += msm_ion_camera_size;
-	msm7x27a_reserve_table[MEMTYPE_EBI1].size += msm_ion_audio_size;
+	msm7x27a_reserve_table[MEMTYPE_EBI1].size += PMEM_KERNEL_EBI1_SIZE;
 	msm7x27a_reserve_table[MEMTYPE_EBI1].size += msm_ion_sf_size;
 #endif
 }
@@ -1105,18 +1116,14 @@ static void __init msm7x27a_reserve(void)
 #endif /* CONFIG_SRECORDER_MSM */
 }
 
-
-/* 此段代码被全部移到static void __init msm7x27a_reserve(void)函数前面 */
-
 static void __init msm8625_reserve(void)
 {
 	msm7x27a_reserve();
 
-/* 此段代码被全部移到的实现被移到static void __init msm7x27a_reserve(void)函数里面实现 */
-
 	memblock_remove(MSM8625_SECONDARY_PHYS, SZ_8);
 	memblock_remove(MSM8625_WARM_BOOT_PHYS, SZ_32);
 	memblock_remove(MSM8625_NON_CACHE_MEM, SZ_2K);
+	memblock_remove(BOOTLOADER_BASE_ADDR, msm_ion_audio_size);
 }
 
 static void __init msm7x27a_device_i2c_init(void)

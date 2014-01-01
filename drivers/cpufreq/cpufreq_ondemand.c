@@ -939,7 +939,7 @@ static inline void dbs_timer_exit(struct cpu_dbs_info_s *dbs_info)
 
 static int should_io_be_busy(void)
 {
-	return 1;
+	return 0;
 }
 
 static void dbs_refresh_callback(struct work_struct *work)

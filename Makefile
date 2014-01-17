@@ -326,7 +326,7 @@ CFLAGS_MODULE   =
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  =
 CFLAGS_KERNEL	=
-# CFLAGS_KERNEL	= -march=armv7-a -mfpu=neon -mcpu=cortex-a5 -mtune=cortex-a5 -ftree-vectorize -ffast-math -fsingle-precision-constant
+CFLAGS_KERNEL	= -march=armv7-a -mfpu=neon -mcpu=cortex-a5 -mtune=cortex-a5 -ftree-vectorize -ffast-math -fsingle-precision-constant
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -537,7 +537,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O3
 endif
 
 KBUILD_CFLAGS	+= -DHUAWEI_KERNEL_VERSION=\"${HUAWEI_KERNEL_VERSION}\"

@@ -32,7 +32,7 @@
  */
 
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)
-#define DEF_FREQUENCY_UP_THRESHOLD		(80)
+#define DEF_FREQUENCY_UP_THRESHOLD		(75)
 #define DEF_SAMPLING_DOWN_FACTOR		(1)
 #define MAX_SAMPLING_DOWN_FACTOR		(100000)
 #define MICRO_FREQUENCY_DOWN_DIFFERENTIAL	(3)
@@ -684,12 +684,12 @@ void set_sampling_rate(int screen_on)
 EXPORT_SYMBOL(set_sampling_rate);
 
 /* set threshold according to the input parameter screen_on:
-   1: set up_threshold to non-idle state value, namely 80%
+   1: set up_threshold to non-idle state value, namely 75%
    0: set up_threshold to idle state value, namely 95%
 */
 void set_up_threshold(int screen_on)
 {
-    char *buff_on = "80";
+    char *buff_on = "75";
     char *buff_off= "95";
 
     if(1 == screen_on)

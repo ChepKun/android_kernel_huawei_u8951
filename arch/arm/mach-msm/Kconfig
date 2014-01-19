@@ -1754,7 +1754,7 @@ config MSM_CPU_FREQ_MAX
 config MSM_CPU_FREQ_MIN
 	int "Min CPU Frequency"
 	depends on MSM_CPU_FREQ_SET_MIN_MAX
-	default 122880
+	default 61440
 
 config MSM8X25_OVERCLOCK
  	bool "Enable overclock for MSM8X25"

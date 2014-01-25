@@ -52,7 +52,7 @@ static struct snd_endpoint snd_endpoints_list[] = {
 	SND(MTK_HEADSET, 44),
 	SND(MTK_SPEAKER, 45),
 	SND(MTK_BT, 46),	
-    SND(MMI_BTLOOP_MTK, 47),
+    	SND(MMI_BTLOOP_MTK, 47),
 	SND(MMI_BTLOOP_QCOM, 48),
 	SND(MTK_HANDSET_MUSIC, 49),
 	SND(MTK_HEADSET_MUSIC, 50),

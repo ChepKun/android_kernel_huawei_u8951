@@ -255,13 +255,13 @@ static struct msm_i2c_platform_data msm_gsbi1_qup_i2c_pdata = {
 };
 
 #ifdef CONFIG_ARCH_MSM7X27A
-#define MSM_PMEM_MDP_SIZE       0x2300000
-#define MSM7x25A_MSM_PMEM_MDP_SIZE       0x1500000
+#define MSM_PMEM_MDP_SIZE       	0x2300000
+#define MSM7x25A_MSM_PMEM_MDP_SIZE      0x1500000
 
-#define MSM_PMEM_ADSP_SIZE      0x1200000
-#define MSM_PMEM_ADSP_BIG_SIZE      0x1E00000
-#define MSM7x25A_MSM_PMEM_ADSP_SIZE      0xB91000
-#define CAMERA_ZSL_SIZE		(SZ_1M * 60)
+#define MSM_PMEM_ADSP_SIZE      	0x1100000
+#define MSM_PMEM_ADSP_BIG_SIZE      	0x1E00000
+#define MSM7x25A_MSM_PMEM_ADSP_SIZE     0xB91000
+#define CAMERA_ZSL_SIZE			(SZ_1M * 60)
 
 #define MSM_3M_PMEM_ADSP_SIZE	(0x1048000)
 /*   enlarge the pmem space for HDR on 8950s
